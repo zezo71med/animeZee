@@ -54,7 +54,6 @@ const App = () => {
   const fetchTrending = async () => {
     try {
       const trending = await getTrendingSearches();
-      console.log('trending',trending);
       
       setTrendingList(trending);
     } catch (error) {
