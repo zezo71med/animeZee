@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import MoviesCard from "./components/moviesCard";
-import { useDebounce } from "react-use";
 import { getTrendingSearches, updateSearchCount } from "./ilb/appwrite";
 import Trending from "./components/Trending";
 import { useSelector } from "react-redux";
