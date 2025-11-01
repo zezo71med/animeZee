@@ -5,6 +5,8 @@ import MoviesCard from "./components/moviesCard";
 import { useDebounce } from "react-use";
 import { getTrendingSearches, updateSearchCount } from "./ilb/appwrite";
 import Trending from "./components/Trending";
+import { useSelector } from "react-redux";
+import type { RootState } from "./state/Store";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_BASEURL = import.meta.env.VITE_TMDB_BASE_URL;
 const API_OPTIONS = {
@@ -14,14 +16,14 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_KEY}`,
   },
 };
+  
 const App = () => {
-  const [searchTerm, serSearchTerm] = useState("");
+  const searchTerm = useSelector((state:RootState)=>state.searchTerm.searchTerm  );
+  // const [searchTerm, serSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [debouncedSerchTerm, setDebouncedSerchTerm] = useState("");
   const [trendingList, setTrendingList] = useState<any>([]);
-  useDebounce(() => setDebouncedSerchTerm(searchTerm), 700, [searchTerm]);
   const fetchMovies = async (query: string) => {
     setIsLoading(true);
     try {
@@ -50,22 +52,22 @@ const App = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
   const fetchTrending = async () => {
     try {
       const trending = await getTrendingSearches();
-      
+
       setTrendingList(trending);
     } catch (error) {
       console.error("Error fetching trending searches:", error);
     }
   };
   useEffect(() => {
-    fetchTrending()
+    fetchTrending();
   }, []);
-  useEffect(() => {
-    fetchMovies(debouncedSerchTerm);
-  }, [debouncedSerchTerm]);
+  useEffect(() => { 
+    fetchMovies(searchTerm);
+  }, [searchTerm]);
   return (
     <main>
       <div className="pattern" />
@@ -76,7 +78,7 @@ const App = () => {
             find <span className="text-gradient">Movies</span> you'll Enjoy
             without the hassle
           </h1>
-          <Search searchTerm={searchTerm} serSearchTerm={serSearchTerm} />
+          <Search />
         </header>
         <section>
           <Trending trending={trendingList} />
@@ -85,10 +87,15 @@ const App = () => {
             {isLoading ? (
               <Spinner />
             ) : errorMessage ? (
-              <p className="text-red-500">{errorMessage}</p>
+              <div
+                className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                role="alert"
+              >
+                <span className="font-medium">{errorMessage}</span>
+              </div>
             ) : (
               <ul>
-                {movieList.map((movie:any) => (
+                {movieList.map((movie: any) => (
                   <MoviesCard key={movie.id} movie={movie} />
                 ))}
               </ul>
