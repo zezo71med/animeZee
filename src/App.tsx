@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Search from "./components/Search";
 import Spinner from "./components/Spinner";
 import MoviesCard from "./components/moviesCard";
@@ -6,6 +6,7 @@ import { getTrendingSearches, updateSearchCount } from "./ilb/appwrite";
 import Trending from "./components/Trending";
 import { useSelector } from "react-redux";
 import type { RootState } from "./state/Store";
+import { AppContext } from "./context/AppProvider";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_BASEURL = import.meta.env.VITE_TMDB_BASE_URL;
 const API_OPTIONS = {
@@ -15,14 +16,15 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_KEY}`,
   },
 };
-  
+
 const App = () => {
-  const searchTerm = useSelector((state:RootState)=>state.searchTerm.searchTerm  );
+  const searchTerm = useSelector((state: RootState) => state.searchTerm.searchTerm);
   // const [searchTerm, serSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [movieList, setMovieList] = useState([]);
+  const [movieList, setMovieList] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [trendingList, setTrendingList] = useState<any>([]);
+  const { name } = useContext(AppContext)
   const fetchMovies = async (query: string) => {
     setIsLoading(true);
     try {
@@ -51,7 +53,7 @@ const App = () => {
     } finally {
       setIsLoading(false);
     }
-  };  
+  };
   const fetchTrending = async () => {
     try {
       const trending = await getTrendingSearches();
@@ -64,7 +66,9 @@ const App = () => {
   useEffect(() => {
     fetchTrending();
   }, []);
-  useEffect(() => { 
+  console.log("name", name);
+
+  useEffect(() => {
     fetchMovies(searchTerm);
   }, [searchTerm]);
   return (
@@ -82,7 +86,7 @@ const App = () => {
         <section>
           <Trending trending={trendingList} />
           <div className="all-movies">
-            <h2>All Movies</h2>
+            <h2>All Movies {name && ` match ${name}`}</h2>
             {isLoading ? (
               <Spinner />
             ) : errorMessage ? (
@@ -93,11 +97,14 @@ const App = () => {
                 <span className="font-medium">{errorMessage}</span>
               </div>
             ) : (
-              <ul>
-                {movieList.map((movie: any) => (
-                  <MoviesCard key={movie.id} movie={movie} />
-                ))}
-              </ul>
+              movieList.length > 0 ?
+                <ul>
+                  {movieList.map((movie: any) => (
+                    <MoviesCard key={movie.id} movie={movie} />
+                  ))}
+                </ul> :
+                <h3 className="text-white font-xl">results don't any matching</h3>
+            
             )}
           </div>
         </section>
