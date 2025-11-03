@@ -6,6 +6,7 @@ import { getTrendingSearches, updateSearchCount } from "./ilb/appwrite";
 import Trending from "./components/Trending";
 import { useSelector } from "react-redux";
 import type { RootState } from "./state/Store";
+import { useLocation } from "react-router-dom";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_BASEURL = import.meta.env.VITE_TMDB_BASE_URL;
 const API_OPTIONS = {
@@ -23,6 +24,8 @@ const App = () => {
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [trendingList, setTrendingList] = useState<any>([]);
+  const stateData= useLocation().state;
+  console.log("Location state data:",stateData);
   const fetchMovies = async (query: string) => {
     setIsLoading(true);
     try {
