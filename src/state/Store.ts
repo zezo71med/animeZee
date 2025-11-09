@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import SearchTermReducer from './search/searchTerm.ts';
+import SearchTermReducer from './reducers/searchTerm.ts';
+import CounterReducer from './reducers/Counyter.ts'
 export const store=configureStore({
     reducer:{
-        searchTerm: SearchTermReducer
+        searchTerm: SearchTermReducer,
+        counter:CounterReducer
     }
 })
 

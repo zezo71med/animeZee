@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setSearchTerm } from "../state/reducers/searchTerm";
+import { useDebounce } from "react-use";
 import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
+  const [searchTerm, setLocalSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [isSearchOpen, setSearchOpen] = useState(false);
+const disPatch= useDispatch()
+useDebounce(()=> setDebouncedSearchTerm(searchTerm),700,[searchTerm])
+useEffect(()=>{
+disPatch(setSearchTerm(debouncedSearchTerm))
+
+},[disPatch,debouncedSearchTerm])
   const navbarLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -80,6 +91,8 @@ const Navbar = () => {
                          dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
                          dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search..."
+              onChange={(e) => setLocalSearchTerm(e.target.value)}
+
             />
           </div>
 
@@ -112,9 +125,8 @@ const Navbar = () => {
 
         {/* Menu + Mobile Search */}
         <div
-          className={`items-center justify-between w-full md:flex md:w-auto md:order-1 transition-all ${
-            isMenuOpen ? "block" : "hidden"
-          }`}
+          className={`items-center justify-between w-full md:flex md:w-auto md:order-1 transition-all ${isMenuOpen ? "block" : "hidden"
+            }`}
         >
           {/* Mobile Search Input */}
           {isSearchOpen && (
@@ -135,7 +147,7 @@ const Navbar = () => {
                          md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
           >
             {navbarLinks.length > 0 &&
-              navbarLinks.map((link:any) => (
+              navbarLinks.map((link: any) => (
                 <li key={link.path}>
                   <NavLink  className={({isActive})=>` block py-2 px-3 text-white hover:text-blue-300 rounded-sm md:bg-transparent 
                            md:text-blue-700 md:p-0 md:dark:text-blue-500 ${isActive?"text-green-500":''}`}

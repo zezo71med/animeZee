@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { setSearchTerm as setSearchTermAction } from "../state/search/searchTerm";
+import { setSearchTerm as setSearchTermAction } from "../state/reducers/searchTerm";
 import { useDebounce } from "react-use";
 import { useEffect, useState } from "react";
 import type { AppDispatch } from "../state/Store";
