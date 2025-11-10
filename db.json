@@ -1,0 +1,23 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "email": "ali",
+        "password": "123zxcv",
+        "token": "fsaloafiwrufp8387v0h237v976397b367vn92tloweiuev87tb7vt3te9r7t08w7tv73w6e7vr97292c9"
+      },
+      {
+        "id": 2,
+        "email": "john@mail.com",
+        "password": "123zxcv",
+        "token": "fsaloafiwrufp8387v0h237v976397b367vn92tloweiuev87tb7vt3te9r7t08w7tv73w6e7vr97292c9"
+      },
+      {
+        "id": 3,
+        "email": "sara@mail.com",
+        "password": "123zxcv",
+        "token": "a-different-example-token-1234567890abcdef"
+      }
+    ]
+  }
+  
