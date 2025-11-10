@@ -1,11 +1,20 @@
 import { useState } from "react";
+import type { useLoginMutation } from "../state/ApiHandler";
 
 const Login = () => {
     const [email, setEmail] = useState('john@mail.com');
     const [password, setPassword] = useState('changeme');
-    const handleSubmit = e => {
+    const [login, { isLoading, isError, error }] = useLoginMutation()
+    const handleSubmit = async e => {
         e.preventDefault()
-localStorage.setItem('token',"fsaliauroasiaspsdogdgiutesdemesmsusntdnystvwdaRCQJTXUQASYJRCKYBGITBWYTIYBOY8WSYUFIKH")    }
+        try {
+            const response = await login({ email, password }).unwrap;
+            localStorage.setItem('token', "fsaliauroasiaspsdogdgiutesdemesmsusntdnystvwdaRCQJTXUQASYJRCKYBGITBWYTIYBOY8WSYUFIKH")
+        } catch (error) {
+            console.log("token is filed");
+
+        }
+    }
     return (<>
 
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
