@@ -1,20 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit';
 import SearchTermReducer from './reducers/searchTerm.ts';
 import CounterReducer from './reducers/Counyter.ts'
-import { apiHandler } from './ApiHandler.ts';
-import loggerMiddleware from '../middleware.ts';
+import { MoviesApi } from './MoviesApi.ts';
+import { setupListeners } from '@reduxjs/toolkit/query';
 export const store=configureStore({
     reducer:{
         searchTerm: SearchTermReducer,
         counter:CounterReducer,
-        [apiHandler.reducerPath]:apiHandler.reducer
+        [MoviesApi.reducerPath]:MoviesApi.reducer
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(loggerMiddleware),
-        
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(MoviesApi.middleware),        
 
 })
 
 
-
+setupListeners(store.dispatch)
 export type RootState=ReturnType<typeof store.getState>;
 export type AppDispatch=typeof store.dispatch;

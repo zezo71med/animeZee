@@ -6,6 +6,7 @@ import { Client, Databases, ID, Query } from "appwrite";
 const client = new Client();
 client.setEndpoint("https://cloud.appwrite.io/v1").setProject(PROJECT_ID);
 export const databases = new Databases(client);
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateSearchCount = async (searchTerm: string, movie: any) => {
   try {
     const result = await databases.listDocuments(DATABASE_ID, TABLE_ID, [

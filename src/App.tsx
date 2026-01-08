@@ -9,6 +9,7 @@ import type { RootState } from "./state/Store";
 import { AppContext } from "./context/AppProvider";
 import { useLocation } from "react-router-dom";
 import useCounter from "./hooks/UseCounter";
+import { useGetMoviesQuery } from "./state/MoviesApi";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const API_BASEURL = import.meta.env.VITE_TMDB_BASE_URL;
 const API_OPTIONS = {
@@ -24,13 +25,14 @@ const App = () => {
   const {count,increment} = useCounter()
   // const [searchTerm, serSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [movieList, setMovieList] = useState<any>([]);
+  const [movieList,   ] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [trendingList, setTrendingList] = useState<any>([]);
+  const {data:moviesData ,isLoading:isLoadingMovies,isError}= useGetMoviesQuery()
   const { name } = useContext(AppContext)
   const counterStateByRedux= useSelector((state:RootState)=>state.counter)
   const stateData= useLocation().state;
-  console.log("Location state data:",stateData);
+  console.log("Location state data:",moviesData);
   const fetchMovies = async (query: string) => {
     setIsLoading(true);
     try {
@@ -74,49 +76,45 @@ const App = () => {
   }, []);
   console.log("name", name);
 
-  useEffect(() => {
-    fetchMovies(searchTerm);
-  }, [searchTerm]);
+  // useEffect(() => {
+  //   fetchMovies(searchTerm);
+  // }, [searchTerm]);
   return (
-    <main>
-      <div className="pattern" />
-      <div className="wrapper">
-        <header>
-          <img src="./hero.png" alt=" Hero Banner" />
-          <h1>
-            find <span className="text-gradient">Movies</span> you'll Enjoy
-            without the hassle
-          </h1>
-          <Search />
-        </header>
-        <section>
-          <h1>counterStateByRedux {counterStateByRedux.count}</h1>
+    <>
+      <header>
+        <img src="./hero.png" alt=" Hero Banner" />
+        <h1>
+          find <span className="text-gradient">Movies</span> you'll Enjoy
+          without the hassle
+        </h1>
+        <Search />
+      </header>
+      <section>
+        <h1>counterStateByRedux {counterStateByRedux.count}</h1>
           <Trending trending={trendingList} />
-          <div className="all-movies">
-            <h2>All Movies {name && ` match ${name}`}</h2>
-            {isLoading ? (
-              <Spinner />
-            ) : errorMessage ? (
-              <div
-                className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                role="alert"
-              >
-                <span className="font-medium">{errorMessage}</span>
-              </div>
+        <div className="all-movies">
+          <h2>All Movies {name && ` match ${name}`}</h2>
+          {isLoadingMovies ? (
+            <Spinner />
+          ) : isError ? (
+            <div
+              className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+              role="alert"
+            >
+              <span className="font-medium">{errorMessage}</span>
+            </div>
             ) : (
-              movieList.length > 0 ?
-                <ul>
-                  {movieList.map((movie: any) => (
-                    <MoviesCard key={movie.id} movie={movie} />
-                  ))}
-                </ul> :
-                <h3 className="text-white font-xl">results don't any matching</h3>
-            
-            )}
-          </div>
-        </section>
-      </div>
-    </main>
+              moviesData.results.length > 0 ?
+            <ul>
+              {moviesData.results.map((movie: any) => (
+                <MoviesCard key={movie.id} movie={movie} />
+              ))}
+            </ul>:
+            <h3 className="text-white font-xl">results don't any matching</h3>
+          )}
+        </div>
+      </section>
+    </>
   );
 };
 export default App;

@@ -22,7 +22,7 @@ disPatch(setSearchTerm(debouncedSearchTerm))
   ];
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900">
+    <nav className="bg-white border-gray-200 dark:bg-gray-900 sticky top-0 z-40">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         {/* Logo */}
         <Link
@@ -149,8 +149,8 @@ disPatch(setSearchTerm(debouncedSearchTerm))
             {navbarLinks.length > 0 &&
               navbarLinks.map((link: any) => (
                 <li key={link.path}>
-                  <NavLink  className={({isActive})=>` block py-2 px-3 text-white hover:text-blue-300 rounded-sm md:bg-transparent 
-                           md:text-blue-700 md:p-0 md:dark:text-blue-500 ${isActive?"text-green-500":''}`}
+                  <NavLink  className={({isActive})=>` block py-2 px-3  rounded-sm md:bg-transparent hover:text-green-300 md:p-0
+                           ${isActive?"text-green-500 underline  underline-offset-8":' md:text-blue-700 md:dark:text-blue-500'}`}
                     to={link.path}
                   >
                     {link.name}

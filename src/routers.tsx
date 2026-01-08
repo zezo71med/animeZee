@@ -17,7 +17,7 @@ import DataPage from "./components/react-query/DataPage";
 import RQDataPage from "./components/react-query/RQDataPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
-import Login from "./components/Login";
+import Login from "./pages/Login";
 
 export default AppRouters;
 const ProtectedRoutes = ({ children, user }) => {
@@ -58,7 +58,12 @@ function RootLeyout() {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <main>
+        <div className="pattern" />
+        <div className="wrapper">
+          <Outlet />
+        </div>
+      </main>
     </>
   );
 }

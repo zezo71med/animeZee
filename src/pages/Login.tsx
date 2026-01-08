@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { useLoginMutation } from "../state/ApiHandler";
+import type { useLoginMutation } from "../state/MoviesApi";
 
 const Login = () => {
     const [email, setEmail] = useState('john@mail.com');

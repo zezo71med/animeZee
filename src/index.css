@@ -105,12 +105,16 @@
   .movie-card {
     @apply bg-dark-100 p-5 rounded-2xl shadow-inner shadow-light-100/10;
 
-    & img {
+    & img,
+    .img-port {
       @apply rounded-lg h-auto w-full;
     }
-
     & h3 {
       @apply text-white font-bold text-base line-clamp-1;
+    }
+
+    & span {
+      @apply text-white font-bold text-base line-clamp-15 xs:line-clamp-9 lg:line-clamp-9 top-0 z-1 absolute py-1 px-2;
     }
 
     & .content {
